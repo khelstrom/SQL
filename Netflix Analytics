@@ -65,10 +65,10 @@ VALUES
 
 --Selecting some information to see how the information looks
 --The two tables are connected through the show_id's
-SELECT t.show_id, t.title, p.director, t.type
-FROM "netflix_titles_info" t
-LEFT JOIN "netflix_people" p
-ON t.show_id = p.show_id
+SELECT people.show_id, titles.Title, people.Director, titles.rating, titles.type
+FROM "netflix_people" people
+LEFT JOIN "netflix_titles_info" titles
+ON people.show_id = titles.show_id
 LIMIT 5;
 
 --Finding out how many movies there are in the database
@@ -86,18 +86,18 @@ FROM "netflix_titles_info"
 ORDER BY title asc;
 
 --Selecting the director of the movie, The Starling
-SELECT p.director
-FROM "netflix_titles_info" t
-LEFT JOIN "netflix_people" p
-ON t.show_id = p.show_id
-WHERE t.title = 'The Starling';
+SELECT people.director
+FROM "netflix_titles_info" titles
+LEFT JOIN "netflix_people" people
+ON titles.show_id = people.show_id
+WHERE titles.title = 'The Starling';
 
 --Selecting the oldest movie(s) in the database with its release year
 SELECT title, release_year
 FROM "netflix_titles_info"
 WHERE type = 'Movie'
-AND release_year <= 
-(SELECT MIN(release_year)
+AND release_year IN (
+SELECT MIN(release_year)
 FROM "netflix_titles_info"
 WHERE type = 'Movie');
 --With the use of a subquery, the query will find the oldest released movie(s)
